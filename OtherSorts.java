@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
 
 public class OtherSorts{
 
@@ -36,44 +37,34 @@ public class OtherSorts{
         }
     }
 
-    public static void RadixSort(ArrayList<Integer> numbers, int numBuckets) {
+    public static void RadixSort(ArrayList<Integer> numbers, int maxValue) {
         
-        ArrayList<ArrayList<Integer>> buckets = new ArrayList<>(numBuckets);
-        for (int i = 0; i < numBuckets; i++ )
+        
+        int bucketCount = 10;
+        ArrayList<ArrayList<Integer>> buckets = new ArrayList<>(bucketCount);
+        for (int i = 0; i < bucketCount; i++ )
             buckets.add(new ArrayList<>());
 
-        // Get the max value to calculate which bucket an integer goes into.
-        for (int index = 1; index < numbers.size(); index++) {
-            int key = numbers.get(index) % 10;
-            buckets.get(key).add(numbers.get(index));
-        }
-
-        // Put array values into correct bucket.
-        numbers.clear();
-        for (int index = 0; index < buckets.size(); index++) {
-            if (!buckets.get(index).isEmpty()){
-                for (int j = 0; j < buckets.get(index).size(); j++)
-                    numbers.add(buckets.get(index).get(j));
+        // For each digits place (exp), 
+        // use remainder to calculate which bucket an integer goes into.
+        //
+        for (int exp = 1; maxValue/exp > 0; exp *= 10){
+            for (int value : numbers){
+                int key = (value/exp) % 10;
+                buckets.get(key).add(value);
             }
-        }
-        
-        buckets.clear();
-        for (int i = 0; i < numBuckets; i++ )
-            buckets.add(new ArrayList<>());
 
-        // Get the max value to calculate which bucket an integer goes into.
-        for (int index = 1; index < numbers.size(); index++) {
-            int key = (numbers.get(index) / 10) % 10;
-            buckets.get(key).add(numbers.get(index));
-        }
-
-        // Put array values into correct bucket.
-        numbers.clear();
-        for (int index = 0; index < buckets.size(); index++) {
-            if (!buckets.get(index).isEmpty()){
-                for (int j = 0; j < buckets.get(index).size(); j++)
-                    numbers.add(buckets.get(index).get(j));
+            int index = 0;
+            numbers.clear();
+            System.out.println();
+            for (int b = 0; b < bucketCount; b++ ){
+                for (int val: buckets.get(b)){
+                    numbers.add(val);
+                }
+                System.out.println(b + ": " + buckets.get(b));
+                buckets.get(b).clear();
             }
+ 
         }
     }
 }
